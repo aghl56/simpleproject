@@ -6,3 +6,25 @@ services:
   - docker
 before_install:
   - chmod a+x mvnw
+env:
+  global:
+      - secure: "puv9CHddyuSbFSaBQuqnBoYFgnpXlSt56JRHQD6I4M2ncm2BChLWOduOWHq/q2NgD2nXXqzL0pN2CuWtQOled+ZUu5CSACgSWHI8bTI/ARQ3DMK+PLnca+Lbc/l5KTuD2JaDJj8FacQehktpYMg9ayiWxbjr+gQE96Y8AZkVUKIjRFEHjpDj79UTONvWjNDZYui52fpgsSRA7veiGhe9+ZuPtMKVYuYb0pmCPeqI43hvT9NrZ7dxvubfSxdY1ESYFbAp6V7PD5X0ZmdC7SFUYzIAfcrj55aAVuSJ5Kw+Y74iXp/m/KO1UTI3BPx+Dm91uyuKxxcVj9nVRBhEBvVaBiWhXLGCJeOpnmEx6/Jeox75Fc+757og91GYJd4JpllO5wa4SI/8We3XJ2CgIgj6CWsq9nM7XJxzl3HlwLvWvtdwmttaGTRRPdkvxtfQ5fC9qIk0kLSxFTdXEuf1Qjz9D0dzFKwesNcMXBXfZpekYEN9+aXyiFwciTmTCEWSb/6sFwoShObCW/5eMG+/c3LPeFlgX2L+qPDez+/SY/BD6EVDVS8PYivbJGkbJGABwlgqHHYr/9mjUDd8Ht1hKh+anNO25PbcAzb5EewC+7P2L5Gle3xdiV2ePmgDQeIDAcec8Q6tx3i2c9bZtECpaNyJAr71WpSrKR8fGuuYnswxyt4="
+      - secure: "HzsrtuT6EbrV869XP9ZL9S0coptZryv3gQpvE1/lICgHPz6aUcC0cSNE+l/v9CwRUgx99PZrr0bGu4n7+tmL7LcaiTH0IG2ZAUoUipvmSEtcg1AVq3/G2t9DOwHDNnhX3fycARrJPNSAlULhEpdmyJm6sRNM6dLYNk/MnufBq02j6Yb41D0r/Utts4Mxq8gMAEp88o9N4RVkhh3hBqeF1K/0QV7gfGkvv19oQdIKieLdLazqvJbme0ZLgmhwxqz4GTT+hysddK+4/BEjNTQ6guAZEXnk45q0K2eW5Oauc2dQhdlDBnfIbSu2pIDGCjoFLhTx0sNrfJ2uEw9639Dv/ER6VmtOHhUma7vrWlsi4qZWZKd4g0Ws64yrpgSBYKuHHoovUNTYpwdbdHBPAzMOAksZHdq/IHa40cCTOsQgyFFVgJiBOxoX1L1HZisBwL4Ljf8etUAF/eMSjlcNKAvV5IpH24qxGbG3+h/Q71pMesrnXOlyEiuannyS4QywAaBbq+KY5qalE48Kl+jXGOBrBl/DCx/Fy/cbRwVfnDo7jnejBsM1Ji3qLZY3Ob5Vis4ff4+W6V1l+y7zZfqgbIlczcstQ+lQ1R4ckfkASii4cSZn2+klHWhRmDj2LiYDV6himdimLNzgf7OpqX/izJiq7pzAzhz6muSM8nrv86wwudo="
+      - secure: "MjNyQBzDluaLh2DytT65XyZ/1x6PyQ43odHHKefJ5vdK4r9Q1O0w9UgCKpd6jge6lQGTbgfFPR2+kyvgkLQtnZtm5eSdb/Kv59nLzAfkrP7GvXRENdCm5GBat8qd6VEs0RIyhW8vyie5c9xo9XrNoZkH/ibAt6alUz3dMjPEHpoiBDDWVU86jcWI+CY188RtiICJ8RFAuZIi8Hc+FTRlXK8EiG8OYEEvbladbaCnLLYilPA9WfuLQplc08P6ERovJomke45kr0KatW5HWSBfbjqxp3c05veKnw+VrexyZXaBW0UfJSww20O7Itu0QgCIqUhkv/6Q/SM+2QhzR8rPAWBpjOQoKnXSEw+fteesChtSiPbPJ883a+7qSi5cAUenMwGnX/xKpJKRVZiQVPWljmzr8ZL9kUrx7G13DoUM8P5uhJaFW6sRU9O+gmRUyoCKR+zGAk3gYShBmCJSU8SGf+ZvWrxPvVuKdKSypYxnQWvwOl7YAbWIxU8KOhlZ2MRJrqOXFkawDFi/SHTu+vWPRQ0HQ8C2pGQJgbv2iFuKLe2jbG8UCTyMN9bcFhF+cVNnA+kG5PAI/6gtctRAb2xzaxkMp8J9cMuGJs5nsdZ+nnwSYOb/T0jyWS2inI0+dquJ7iDmnaXcaC8vFBklR+zdbM/wASsJswij+qIWNqmNr5Y="
+      - COMMIT=${TRAVIS_COMMIT::7}
+
+script:
+      - ./mvnw clean install -B
+
+after_success:
+      - docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "latest"; else echo "$TRAVIS_BRANCH"; fi`
+      - export IMAGE_NAME=simpleproject/main-repo
+      - docker build -t $IMAGE_NAME:latest .
+      - docker tag $IMAGE_NAME:latest $IMAGE_NAME:$TAG
+      - docker push $IMAGE_NAME:$TAG
+
+    deploy:
+      provider: heroku
+      api_key: $HEROKU_API_KEY
+      app: simpleproject-mt
