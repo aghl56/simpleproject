@@ -52,8 +52,8 @@ apiVersion: apps/v1
         app: my-app
 ```
 #### Скриншот шага 3.3
-![step 3.3](http://prntscr.com/vep8nx)
+[step 3.3](http://prntscr.com/vep8nx)
 #### Скриншот шага 3.5
-![step 3.5](http://prntscr.com/vepbhi)
+[step 3.5](http://prntscr.com/vepbhi)
 #### Видео с обзором созданного кластера
 [Ссылка на видео](https://yadi.sk/i/IfOZb9WoJWxlZw)
