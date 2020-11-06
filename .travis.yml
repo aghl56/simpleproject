@@ -4,6 +4,8 @@ language: java
 services:
   - postgresql
   - docker
+before_install:
+  - chmod a+x mvnw
 env:
   global:
     - secure: "Cyb9BjLKPqhGFHi+/hf0ujywevWFUKQou4EnGaUraLx1YDBag34xnxnKbdoAKW/MyQYQJTodkGTjeHBFaWwtNX80+NASZaPIXE7kNND4J3fEHqGia3R61RO3EQK/KLBLf/u/2fDOAjB0kBN5anvyVljQJhlKVT3O8fx/tfZ1BHy8ugPrToMf1HlMy8U8DyRl6QlkODdN95oTY+pAqNWnX6dHP8go+k3xANFoygDPcjoJzdIKwXlqNq3Mi1+IBJ8Gr5ZcWRun9JNwfNMBiUtD6/Bz+Ivr4NjVXUEUbMj3uVRBlYKW0ESr5gwpns4j4UmIX/j5ebTlC20cfoIThQ8lklvJG0kK3oJba1PhmoNi9Xv8cxBkxVtln/3I2KZbhWpFUMbJCy55ew7+k3K9bSowZ/IZzy7V2GH0+SbxRUTJbW42Mra5dNlOe8pjz4toT4K36AqhPNhhxJUlug1Tm5d4uJ6jL9JzK6irzR3/e+LukCu+j/v6GFzcfTncCoLsTtrgH37miEVMQmDhyWGnP6RxTXmsigbRgKl2TBjwDzgvGt92rWDD5GmnBiX7WRCz6Yj1cl/3ibQluDgQWi1QYHcI9yPJU4ymKV42IrksuWPQhnlU9N5TI6cKHjV67q3Z1ydUFq0v16UddiYQizCecpZ7DTvhkFjFcojzHu9HtvW5pOc="
